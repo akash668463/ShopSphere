@@ -237,6 +237,125 @@ Ordering Service
 ```
 
 ---
+# 🧩 Vertical Slice Architecture
+
+Vertical Slice Architecture organizes application code around **business features or use cases** rather than traditional technical layers such as Controllers, Services, Repositories, and DTOs.
+
+Instead of grouping all controllers together, all services together, and all repositories together, each feature contains the code required to implement that specific use case.
+
+### Traditional Layered Structure
+
+```text
+Controllers
+    │
+    ▼
+Services
+    │
+    ▼
+Repositories
+    │
+    ▼
+Database
+```
+
+### Vertical Slice Structure
+
+```text
+Features
+│
+├── Products
+│   ├── CreateProduct
+│   │   ├── Command
+│   │   ├── Handler
+│   │   ├── Validator
+│   │   └── Endpoint
+│   │
+│   ├── GetProduct
+│   │   ├── Query
+│   │   ├── Handler
+│   │   └── Endpoint
+│   │
+│   └── DeleteProduct
+│       ├── Command
+│       ├── Handler
+│       └── Endpoint
+│
+└── Orders
+    ├── CreateOrder
+    ├── GetOrder
+    └── CancelOrder
+```
+
+Each feature represents a **vertical slice through the application**, containing the components required to execute that particular business operation.
+
+### VSA + CQRS
+
+Vertical Slice Architecture works naturally with CQRS by organizing commands and queries around individual use cases.
+
+```text
+                    Feature
+                       │
+              ┌────────┴────────┐
+              ▼                 ▼
+           Command             Query
+              │                 │
+              ▼                 ▼
+           Handler            Handler
+              │                 │
+              ▼                 ▼
+        Write Operation     Read Operation
+```
+
+For example:
+
+```text
+Features
+└── Products
+    │
+    ├── CreateProduct
+    │   ├── CreateProductCommand
+    │   ├── CreateProductHandler
+    │   └── CreateProductValidator
+    │
+    └── GetProduct
+        ├── GetProductQuery
+        └── GetProductHandler
+```
+
+### Why Vertical Slice Architecture?
+
+* **Feature Cohesion** — Related code for a business feature stays together.
+* **Reduced Coupling** — Features can evolve independently.
+* **Easier Maintenance** — Changes to a feature generally remain within its slice.
+* **Less Unnecessary Abstraction** — Avoids creating services and interfaces purely because of technical layering.
+* **Scalability of Codebase** — Large applications can be organized around business capabilities rather than growing technical folders.
+
+### Vertical Slice vs Clean Architecture
+
+These approaches solve different problems and can be used together.
+
+**Clean Architecture** focuses primarily on **dependency direction and separation of concerns**.
+
+**Vertical Slice Architecture** focuses primarily on **organizing application code around features/use cases**.
+
+They can therefore be combined:
+
+```text
+Application
+│
+├── Features
+│   ├── CreateProduct
+│   ├── GetProduct
+│   ├── CreateOrder
+│   └── GetOrder
+│
+├── Domain
+│
+└── Infrastructure
+```
+
+##In this project, Vertical Slice Architecture is primarily explored in the **Catalog Microservice**, together with **CQRS, MediatR, and FluentValidation**.
+
 
 # 🌐 API Gateway
 
