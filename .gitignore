@@ -57,13 +57,15 @@ TestResult.xml
 nunit-*.xml
 
 
-# Visual Studio cache and user-specific files
-.vs/
+# Ignore the Visual Studio cache folder located one level above the Src folder
+../.vs/
+
+# Ignore any local user-specific Visual Studio configurations
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 
-# GitHub Copilot indices and specific tool caches
-.vs/**/CopilotIndices/
+# Ignore GitHub Copilot instructions if you do not want to commit them
+.github/copilot-instructions.md
 
