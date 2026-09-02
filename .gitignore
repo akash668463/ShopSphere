@@ -55,3 +55,17 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+
+# Ignore the Visual Studio cache folder located one level above the Src folder
+../.vs/
+
+# Ignore any local user-specific Visual Studio configurations
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore GitHub Copilot instructions if you do not want to commit them
+.github/copilot-instructions.md
+
