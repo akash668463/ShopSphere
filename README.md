@@ -286,6 +286,19 @@ Features
     └── CancelOrder
 ```
 
+[Client Request] 
+       │
+       ▼
+ 1. Endpoint  ──────►  2. Validator  ──────►  3. Command  ──────►  4. Handler  ──────► [Database/Redis]
+(Receives HTTP)       (Checks data)          (Carries data)         (Saves product)
+
+📄 CreateProductEndpoint.cs (The Entry Point)This is the HTTP interface (often using .NET Minimal APIs or FastEndpoints). It listens for the incoming network request, extracts the incoming data, and passes it into your application logic. Its Job: Maps the HTTP POST request (URLs, headers, and JSON body) to a C# object, triggers the command, and returns the final HTTP status code (like 201 Created or 400 Bad Request).
+📄 CreateProductCommand.cs (The Data)This is a simple data structure (usually a C# record) that represents the intent to perform an action and carries the data needed for it.Its Job: It holds the input data required to create a product (e.g., string Name, decimal Price, string Description). It contains no business logic or behavior; it is just a Data Transfer Object (DTO). 
+📄 CreateProductValidator.cs (The Gatekeeper)This file ensures that the data inside the Command is valid before any business logic executes (usually implemented using a library like FluentValidation).
+Its Job: It checks business-agnostic rules. For example, it ensures that the Name is not empty, and the Price is greater than zero. If validation fails, it stops the request immediately and returns an error.
+📄 CreateProductHandler.cs (The Brain)This is where the actual business logic lives (typically executed via a mediator pattern like MediatR).Its Job: It takes the validated CreateProductCommand, processes it, talks to the database (PostgreSQL), updates the cache (Redis) if necessary, and saves the new product. It is the core engine of this specific feature.
+
+
 Each feature represents a **vertical slice through the application**, containing the components required to execute that particular business operation.
 
 ### VSA + CQRS
