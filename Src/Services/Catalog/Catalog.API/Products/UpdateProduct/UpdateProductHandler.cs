@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Products.UpdateProduct;
+﻿using Catalog.API.Exceptions;
+
+namespace Catalog.API.Products.UpdateProduct;
 
 public record UpdateProductCommand(Guid Id, string Name, List<string> Category, string Description, string ImageFile, decimal Price)
     : ICommand<UpdateProductResult>;
@@ -27,10 +29,10 @@ internal class UpdateProductCommandHandler
     {
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
 
-        //if (product is null)
-        //{
-        //    throw new ProductNotFoundException(command.Id);
-        //}
+        if (product is null)
+        {
+            throw new ProductNotFoundException(command.Id);
+        }
 
         product.Name = command.Name;
         product.Category = command.Category;
