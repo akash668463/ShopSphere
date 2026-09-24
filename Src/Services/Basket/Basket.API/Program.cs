@@ -19,6 +19,16 @@ builder.Services.AddMarten(opts =>
 }).UseLightweightSessions();
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+//If you had registered the cachedBasketRepository as AddScoped then the above one will not work as it takes the last registration and avoids the first registration to avoid that we use Scrutor library or we can also register manually
+//Scrutor library simplifies the process of registering decorators in the dependency injection container.
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //options.InstanceName = "Basket";
+});
+
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
